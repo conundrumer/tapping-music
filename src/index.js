@@ -1,23 +1,22 @@
-// console.info('index.js!')
-// when hot reloaded, alt+r in devtools to refresh source maps
-import hello from './hello'
-import bye from './bye'
-import renderButton from './button'
-import time from './time'
-import './random'
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-let removeHello
-let removeBye
+import App from './App'
 
-const renderHello = () => {
-  removeHello = renderButton('container-1', `hello, the time is ${time}`, hello)
-}
-const renderBye = () => {
-  removeBye = renderButton('container-2', 'bye', bye)
-}
-const render = () => {
-  renderHello()
-  renderBye()
+const rootElement = document.getElementById('root')
+
+function render () {
+  try {
+    ReactDOM.render(
+      <App />,
+      rootElement
+    )
+  } catch (e) {
+    ReactDOM.render(
+      <div style={{ color: 'red' }}>Something went wrong: {e.message}</div>,
+      rootElement
+    )
+  }
 }
 render()
 
@@ -29,25 +28,10 @@ if (module.hot) {
 
   module.hot.dispose(() => {
     console.info('index.js will be reloaded')
-    removeHello()
-    removeBye()
-  })
-
-  // these modules have no side effects, so the current module can accept them
-  module.hot.accept('./button', () => {
-    console.info('button has been reloaded')
-    removeHello()
-    removeBye()
-    render()
-  })
-  module.hot.accept('./hello', () => {
-    console.info('hello has been reloaded')
-    removeHello()
-    renderHello()
-  })
-  module.hot.accept('./bye', () => {
-    console.info('bye has been reloaded')
-    removeBye()
-    renderBye()
+    try {
+      ReactDOM.unmountComponentAtNode(rootElement)
+    } catch (e) {
+      rootElement.innerHTML = ''
+    }
   })
 }

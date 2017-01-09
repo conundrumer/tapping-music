@@ -52,7 +52,10 @@ module.exports = (options = {}) => ({
 
           // transpile es2015 code, without transpiling modules to commonjs
           // (since webpack2 uses native modules for tree shaking)
-          ['es2015', { modules: false }]
+          ['es2015', { modules: false }],
+
+          // transpile jsx
+          'react'
         ]
       }
     }]
